@@ -1,4 +1,54 @@
+<!DOCTYPE html>
 <html>
-<head></head>
-<body>Hi</body>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+	background-color: #F7F7EF;
+	font-family: arial;
+  font-weight: 100
+  font-size: 100px; 
+	color: #000000;
+  margin:0;
+padding:0;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #282828;
+}
+iframe{
+    overflow:hidden;
+}
+.topnav a {
+  float: left;
+  color: #ffffff;
+  text-align: center;
+  padding: 24px 24px;
+  text-decoration: none;
+  font-size: 25px;
+}
+.topnav a:hover {
+  background-color: #525252;
+  color: black;
+}
+.topnav a.active {
+  background-color: #525252;
+  color: white;
+}
+</style>
+</head>
+<body>
+<div class="topnav">
+<a href="#"><i class="fa fa-area-chart" style="font-size:25px"></i> Analytics</a>
+  <a class="active" href="#home">COVID-19</a>
+  <a href="#news">Access</a>
+  <a href="#about">Throughput</a>
+  <a href="#contact">Logout</a>
+</div>
+<div style="padding-left:16px">
+<br>
+<iframe src='https://teletracking.looker.com/embed/dashboards/1?State%20Filter=&County%20Filter=-Unassigned&filter_config=%7B%22State%20Filter%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22%22%7D,%7B%7D%5D,%22id%22:4%7D%5D,%22County%20Filter%22:%5B%7B%22type%22:%22!%3D%22,%22values%22:%5B%7B%22constant%22:%22Unassigned%22%7D,%7B%7D%5D,%22id%22:5%7D%5D%7D' width='1200' height='1338' frameborder="0" scrolling="no"></iframe>
+</div>
+</body>
 </html>
