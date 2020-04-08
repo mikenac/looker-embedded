@@ -19,6 +19,7 @@ padding:0;
 }
 iframe{
     overflow:hidden;
+    display: block;
 }
 .topnav a {
   float: left;
@@ -36,6 +37,13 @@ iframe{
   background-color: #525252;
   color: white;
 }
+.contentFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 </style>
 </head>
 <body>
@@ -46,9 +54,9 @@ iframe{
   <a href="#about">Jomama</a>
   <a href="#contact">Logout</a>
 </div>
-<div style="padding-left:16px">
+<div class="contentFrame">
 <br>
-<iframe src='https://teletracking.looker.com/embed/dashboards/1?State%20Filter=&County%20Filter=-Unassigned&filter_config=%7B%22State%20Filter%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22%22%7D,%7B%7D%5D,%22id%22:4%7D%5D,%22County%20Filter%22:%5B%7B%22type%22:%22!%3D%22,%22values%22:%5B%7B%22constant%22:%22Unassigned%22%7D,%7B%7D%5D,%22id%22:5%7D%5D%7D' width='1200' height='1338' frameborder="0" scrolling="no" align="center"></iframe>
+<iframe src='https://teletracking.looker.com/embed/dashboards/1?State%20Filter=&County%20Filter=-Unassigned&filter_config=%7B%22State%20Filter%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22%22%7D,%7B%7D%5D,%22id%22:4%7D%5D,%22County%20Filter%22:%5B%7B%22type%22:%22!%3D%22,%22values%22:%5B%7B%22constant%22:%22Unassigned%22%7D,%7B%7D%5D,%22id%22:5%7D%5D%7D' width='100%' height='1388' frameborder="0" scrolling="no"></iframe>
 </div>
 </body>
 </html>
