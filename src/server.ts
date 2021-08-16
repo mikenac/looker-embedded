@@ -24,7 +24,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get('/auth', cors(), (req, res) => {
   // TODO: Authenticate request
-  
+
   const signer = new LookerUrlSigner(process.env.LOOKER_SERVER, process.env.LOOKER_SECRET);
 
   // tslint:disable-next-line:no-console
