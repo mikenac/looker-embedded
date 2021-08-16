@@ -6,7 +6,9 @@
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "npm-run-all serverBuild clientBuild",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/server.ts",
+    "build:react": "cd client && npm start",
+    "build:node": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/server.ts",
+    "build:live": "run-p build:node build:react",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "serverBuild": "tsc -p .",
