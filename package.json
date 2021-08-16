@@ -10,8 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "serverBuild": "tsc -p .",
-    "clientBuild": "cd client && npm install && npm run build",
-    "dev": "concurrently \"npm start\" \"client/npm start\""
+    "clientBuild": "cd client && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",

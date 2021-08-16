@@ -27,15 +27,11 @@ app.get('/auth', cors(), (req, res) => {
 
   const signer = new LookerUrlSigner(process.env.LOOKER_SERVER, process.env.LOOKER_SECRET);
 
-  // tslint:disable-next-line:no-console
-  // console.log(req);
   const url = signer.signUrl(req.query.src);
   res.json({url})
 });
 
 app.get("*", cors(), (req, res) => {
-  // tslint:disable-next-line:no-console
-  console.log(__dirname);
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
