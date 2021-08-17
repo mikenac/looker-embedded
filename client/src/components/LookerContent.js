@@ -10,7 +10,7 @@ export default class LookerContent extends React.Component {
 
         LookerEmbedSDK.init(REACT_APP_LOOKER_HOST,
             {
-                "url": REACT_APP_LOOKER_AUTH_URL,
+                "url": "/auth",
                 "headers": [],
                 "params": [],
                 withCredentials: false
