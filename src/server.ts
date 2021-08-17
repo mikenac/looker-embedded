@@ -5,14 +5,13 @@ import dotenv from 'dotenv'
 import path from 'path'
 
 const app = express();
-app.use(cors());
-
 // Create a static pathmap for serving react pages
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // Load environment variables
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
+  app.use(cors()); 
 }
 
 const port = process.env.PORT || 5000;
