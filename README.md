@@ -27,7 +27,7 @@ Starts everything on (PORT) for real use.
 |LOOKER_SECRET| The Looker embed secret from your Looker instance |
 |LOOKER_SERVER| Your Looker server DNS name |
 |PORT| The port to run the /auth endpoint (5000) |
-|REACT_APP_LOOKER_AUTH_URL| The URL of the authentication service. Should be http(s)://localhost:5000 |
+|REACT_APP_LOOKER_AUTH_URL| The URL of the authentication service. Should be '/auth' |
 |REACT_APP_LOOKER_HOST| Your Looker server DNS name (used by client side. |
 
 These can be put into .env files in the project root and client/ folders (REACT ones go in client/) for development.
