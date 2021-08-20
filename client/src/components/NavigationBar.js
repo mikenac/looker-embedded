@@ -18,6 +18,7 @@ export const NavigationBar = () => (
     <Nav className="justify-content-start">
         <Navbar.Brand href="/">Analytics</Navbar.Brand>
         <Nav.Link href="/">Home</Nav.Link>
+        <Nav.Link href="/auth/github">Login</Nav.Link>
         <NavDropdown title="Dashboards" id="basic-nav-dropdown-dashboards">
         {Dashboards}
         </NavDropdown>
