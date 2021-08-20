@@ -7,9 +7,14 @@ import passport from 'passport';
 import {Profile} from 'passport'
 import passportGithub  from 'passport-github2'
 import cookieSession from "cookie-session";
+import session from 'express-session';
 
 
 const GitHubStrategy = passportGithub.Strategy;
+
+interface BetterSession extends session.Session {
+  redirectTo: string
+};
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
@@ -18,7 +23,14 @@ if (process.env.NODE_ENV !== 'production') {
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_AUTH_CALLBACK, VALID_USERS } = process.env;
 const AUTHORIZED_USERS = JSON.parse(VALID_USERS);
 
+
 const app = express();
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors({
+    credentials: true
+  }));
+}
 
 passport.use(new GitHubStrategy({
   clientID: GITHUB_CLIENT_ID,
@@ -27,8 +39,7 @@ passport.use(new GitHubStrategy({
 },
 (accessToken: string, refreshToken: string, profile: any, done: (err?: Error | null, profile?: any, message?: any) => void) => {
    {
-    // tslint:disable-next-line:no-console
-    // console.log("PROFILE:" + JSON.stringify(profile));
+
     const passProf = profile as Profile;
     if(AUTHORIZED_USERS.users.includes(passProf.username)){
       return done(null, profile);
@@ -48,7 +59,6 @@ passport.deserializeUser((obj, done) => {
 });
 
 // Create a static pathmap for serving react pages
-
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.use(cookieSession({
   name: "github-auth-session",
@@ -57,10 +67,6 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(cors());
-}
-
 const port = process.env.PORT || 5000;
 
 
@@ -68,18 +74,14 @@ const port = process.env.PORT || 5000;
 // tslint:disable-next-line:no-console
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-// tslint:disable-next-line:no-unused-expression
-// app.get("/*"), (_req: express.Request, res: express.Response, next: express.NextFunction) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     next();
-// }
 
 const isLoggedIn = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (req.user) {
     next();
   } else {
+    const daSesh = req.session as BetterSession
+    daSesh.redirectTo = req.originalUrl;
     res.redirect('/auth/github');
-    // res.status(401).send("Not logged in");
   }
 }
 
@@ -101,8 +103,7 @@ app.get('/auth/github/callback',
   { failureRedirect: '/auth/error'}),
   (req, res) => {
     // Successful authentication, redirect home.
-    // console.log(JSON.stringify(req.headers))
-    res.redirect('/');
+    res.redirect((req.session as BetterSession).redirectTo || "/");
   });
 
 app.get('/auth', isLoggedIn,
@@ -114,7 +115,7 @@ app.get('/auth', isLoggedIn,
   res.json({url})
 });
 
-app.get("*", (req, res) => {
+app.get("*", isLoggedIn, (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
