@@ -57,9 +57,9 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// if (process.env.NODE_ENV !== 'production') {
-//   app.use(cors());
-// }
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors());
+}
 
 const port = process.env.PORT || 5000;
 
@@ -105,7 +105,7 @@ app.get('/auth/github/callback',
     res.redirect('/');
   });
 
-app.get('/auth', [cors(), isLoggedIn],
+app.get('/auth', isLoggedIn,
              (req: express.Request, res: express.Response) => {
 
   const signer = new LookerUrlSigner(process.env.LOOKER_SERVER, process.env.LOOKER_SECRET);
@@ -114,7 +114,7 @@ app.get('/auth', [cors(), isLoggedIn],
   res.json({url})
 });
 
-app.get("*", cors(), (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
