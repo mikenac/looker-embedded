@@ -27,6 +27,9 @@ Starts everything on (PORT) for real use.
 |LOOKER_SECRET| The Looker embed secret from your Looker instance |
 |LOOKER_SERVER| Your Looker server DNS name |
 |PORT| The port to run the /auth endpoint (5000) |
+| GITHUB_CLIENT_ID | The Github oAuth client ID |
+| GITHUB_CLIENT_SECRET | The Github oAuth client secret |
+| VALID_USERS| Authorized users: {"users": ["user"]} |
 |REACT_APP_LOOKER_AUTH_URL| The URL of the authentication service. Should be '/auth' |
 |REACT_APP_LOOKER_HOST| Your Looker server DNS name (used by client side. |
 
