@@ -29,7 +29,7 @@ Starts everything on (PORT) for real use.
 |PORT| The port to run the /auth endpoint (5000) |
 | GITHUB_CLIENT_ID | The Github oAuth client ID |
 | GITHUB_CLIENT_SECRET | The Github oAuth client secret |
-| VALID_USERS| Authorized users: {"users": ["user"]} |
+| VALID_USERS| Authorized users: {"users": ["user"]} "user is the Github user name.  |
 |REACT_APP_LOOKER_AUTH_URL| The URL of the authentication service. Should be '/auth' |
 |REACT_APP_LOOKER_HOST| Your Looker server DNS name (used by client side. |
 
