@@ -8,14 +8,7 @@ import {Profile} from 'passport'
 import passportGithub  from 'passport-github2'
 import cookieSession from "cookie-session";
 import session from 'express-session';
-import rateLimit from 'express-rate-limit'
 
-
-// set a page rate limit
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 per window
-});
 
 const GitHubStrategy = passportGithub.Strategy;
 
@@ -70,8 +63,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
-
-app.use(limiter);
 
 // Create a static pathmap for serving react pages
 app.use(express.static(path.resolve(__dirname, '../client/build')));
