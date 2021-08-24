@@ -5,21 +5,16 @@ import { LookerEmbedSDK } from "@looker/embed-sdk";
 const { REACT_APP_LOOKER_AUTH_URL, REACT_APP_LOOKER_HOST } = process.env;
 
 export default class LookerContent extends React.Component {
-    constructor(props) {
-        super(props);
+    
+    componentDidMount() {
 
         LookerEmbedSDK.init(REACT_APP_LOOKER_HOST,
             {
                 "url": REACT_APP_LOOKER_AUTH_URL,
-                "headers": [{"Access-Control-Allow-Origin": "*"},
-                {"Access-Control-Allow-Methods": "*"},
-                {"Access-Control-Allow-Headers": "*"},
-                {"Referer-Policy": "origin"}],
+                "headers": [],
                 "params": [],
                 withCredentials: true
             });
-    }
-    componentDidMount() {
 
         const { contentType, match } = this.props;
         const id = match.params.id;
@@ -35,7 +30,7 @@ export default class LookerContent extends React.Component {
                     console.error('Connection error', error);
                 });
         }
-        if (contentType === "look") {
+        else if (contentType === "look") {
             LookerEmbedSDK.createLookWithId(id)
                 .appendTo("#db")
                 .withClassName('looker-embed')
@@ -46,7 +41,7 @@ export default class LookerContent extends React.Component {
                     console.error('Connection error', error);
                 });
         }
-        if (contentType === "explore") {
+        else if (contentType === "explore") {
             LookerEmbedSDK.createExploreWithId(id)
                 .appendTo("#db")
                 .withClassName('looker-embed')
@@ -56,6 +51,9 @@ export default class LookerContent extends React.Component {
                 .catch((error) => {
                     console.error('Connection error', error);
                 });
+        }
+        else {
+            console.log(`Invalid content type: ${contentType}`);
         } 
     }
 
