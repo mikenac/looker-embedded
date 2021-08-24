@@ -12,7 +12,7 @@
     "build:react": "cd client && npm start",
     "build:node": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/server.ts",
     "build:live": "run-p build:node build:react",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Did not do any tests\" ",
     "start": "node .",
     "serverBuild": "tsc -p .",
     "clientBuild": "cd client && npm install && npm run build"
