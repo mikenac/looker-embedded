@@ -1,6 +1,8 @@
 # looker-embedded
 Looker embedded React application and auth endpoint.
 
+![example workflow](https://github.com/mikenac/looker-embedded/actions/workflows/node.js.yml/badge.svg)
+
 ## Usage:
 
 ### Build
