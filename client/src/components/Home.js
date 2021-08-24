@@ -6,7 +6,7 @@ export default class Home extends React.Component {
     render () {
         return (
             <Container fluid>
-                <p>The home page.</p>
+                <p>Home is where the heart is.</p>
             </Container>
         );
     }

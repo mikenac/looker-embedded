@@ -5,9 +5,11 @@ import { LookerEmbedSDK } from "@looker/embed-sdk";
 const { REACT_APP_LOOKER_AUTH_URL, REACT_APP_LOOKER_HOST } = process.env;
 
 export default class LookerContent extends React.Component {
-    
+    // Simple component for displaying embedded looker content.
+    // Will render for Dashboard, Looks, or Explore based on the input props from the route.
     componentDidMount() {
 
+        // Initialize looker SDK and setup the auth end point
         LookerEmbedSDK.init(REACT_APP_LOOKER_HOST,
             {
                 "url": REACT_APP_LOOKER_AUTH_URL,
@@ -16,9 +18,12 @@ export default class LookerContent extends React.Component {
                 withCredentials: true
             });
 
+        // This is either (dashboard|look|explore), default dashboard
         const { contentType, match } = this.props;
+        // The captures content ID from the original menu route e.g. dashboard/1
         const id = match.params.id;
 
+        // render DB
         if (contentType === "dashboard") {
             LookerEmbedSDK.createDashboardWithId(id)
                 .appendTo("#db")
@@ -30,6 +35,7 @@ export default class LookerContent extends React.Component {
                     console.error('Connection error', error);
                 });
         }
+        // render look
         else if (contentType === "look") {
             LookerEmbedSDK.createLookWithId(id)
                 .appendTo("#db")
@@ -41,6 +47,7 @@ export default class LookerContent extends React.Component {
                     console.error('Connection error', error);
                 });
         }
+        // render explore
         else if (contentType === "explore") {
             LookerEmbedSDK.createExploreWithId(id)
                 .appendTo("#db")
@@ -58,7 +65,7 @@ export default class LookerContent extends React.Component {
     }
 
     render() {
-    
+        // Simple div for content
         return (
             <Container id="db" />
         );

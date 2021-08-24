@@ -1,4 +1,7 @@
 
+// main navigation bar, the arrays below represent valid content in the looker system
+// TODO: populate these arrays by calling the looker API
+
 import {  Navbar, Nav, NavDropdown } from 'react-bootstrap'
 
 const Dashboards = [1, 2, 3, 4, 9].map((db, idx) => (
