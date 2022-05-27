@@ -28,7 +28,6 @@ export default class LookerContent extends React.Component {
             LookerEmbedSDK.createDashboardWithId(id)
                 .appendTo("#db")
                 .withClassName('looker-embed')
-                .withNext()
                 .build()
                 .connect()
                 .catch((error) => {
@@ -40,7 +39,6 @@ export default class LookerContent extends React.Component {
             LookerEmbedSDK.createLookWithId(id)
                 .appendTo("#db")
                 .withClassName('looker-embed')
-                .withNext()
                 .build()
                 .connect()
                 .catch((error) => {
@@ -52,7 +50,6 @@ export default class LookerContent extends React.Component {
             LookerEmbedSDK.createExploreWithId(id)
                 .appendTo("#db")
                 .withClassName('looker-embed')
-                .withNext()
                 .build()
                 .connect()
                 .catch((error) => {

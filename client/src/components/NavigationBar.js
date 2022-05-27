@@ -4,7 +4,7 @@
 
 import {  Navbar, Nav, NavDropdown } from 'react-bootstrap'
 
-const Dashboards = [1, 2, 3, 4, 8].map((db, idx) => (
+const Dashboards = [31,34,36,37,39,40,43,59].map((db, idx) => (
     <NavDropdown.Item key={idx} href={`/dashboard/${db}`}>Dashboard {db}</NavDropdown.Item>
   ));
 

@@ -4,7 +4,7 @@
   "description": "Looker URL signing service",
   "main": "dist/server.js",
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
