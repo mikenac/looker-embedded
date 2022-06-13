@@ -34,28 +34,6 @@ export default class LookerContent extends React.Component {
                     console.error('Connection error', error);
                 });
         }
-        // render look
-        else if (contentType === "look") {
-            LookerEmbedSDK.createLookWithId(id)
-                .appendTo("#db")
-                .withClassName('looker-embed')
-                .build()
-                .connect()
-                .catch((error) => {
-                    console.error('Connection error', error);
-                });
-        }
-        // render explore
-        else if (contentType === "explore") {
-            LookerEmbedSDK.createExploreWithId(id)
-                .appendTo("#db")
-                .withClassName('looker-embed')
-                .build()
-                .connect()
-                .catch((error) => {
-                    console.error('Connection error', error);
-                });
-        }
         else {
             console.log(`Invalid content type: ${contentType}`);
         } 

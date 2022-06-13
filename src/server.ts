@@ -3,13 +3,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from 'dotenv'
 import path from 'path'
-import passport from 'passport';
-import {Profile} from 'passport'
-import passportGithub  from 'passport-github2'
-import cookieSession from "cookie-session";
-import session from 'express-session';
-import rateLimit from 'express-rate-limit'
 
+import rateLimit from 'express-rate-limit'
+// import { auth, requiresAuth } from 'express-openid-connect'
+import { auth } from 'express-openid-connect'
 
 // set a page rate limit
 const limiter = rateLimit({
@@ -17,70 +14,47 @@ const limiter = rateLimit({
   max: 100 // limit each IP to 100 per window
 });
 
-const GitHubStrategy = passportGithub.Strategy;
-
-// typesafe interface for extensin the session with an additional attribute
-// this will allow the user to be redirected to their original target after authentication
-interface BetterSession extends session.Session {
-  redirectTo: string
-};
-
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 
-const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_AUTH_CALLBACK, VALID_USERS, EMBED_USER, LOOKER_SERVER, LOOKER_SECRET } = process.env;
+const { ISSUER_BASE_URL, BASE_URL, CLIENT_ID, SESSION_SECRET, VALID_USERS, EMBED_USER, LOOKER_SERVER, LOOKER_SECRET, NODE_ENV } = process.env;
 
 // Only these Github users will be able to authenticate.
 const AUTHORIZED_USERS = JSON.parse(VALID_USERS);
 
-
 const app = express();
 
-if (process.env.NODE_ENV !== 'production') {
+if (NODE_ENV !== 'production') {
   app.use(cors({
+    origin: true,
     credentials: true
   }));
+  app.set('trust proxy', true);
 }
 
-// use github authentication to protect the content
-passport.use(new GitHubStrategy({
-  clientID: GITHUB_CLIENT_ID,
-  clientSecret: GITHUB_CLIENT_SECRET,
-  callbackURL: GITHUB_AUTH_CALLBACK,
-},
-(accessToken: string, refreshToken: string, profile: any, done: (err?: Error | null, profile?: any, message?: any) => void) => {
-   {
-
-    // validate based on a fixed set of allowed users
-    const passProf = profile as Profile;
-    if(AUTHORIZED_USERS.users.includes(passProf.username)){
-      return done(null, profile);
-    } else {
-      return done(null, false, { message: "Invalid User" });
-    }
-  };
-}
-));
-
-passport.serializeUser((user, done) => {
-  done (null, user);
-});
-
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+app.use((req, res, next) => {
+  // res.locals.isAuthenticated = req.oidc.isAuthenticated();
+  res.locals.activeRoute = req.originalUrl;
+  next();
 });
 
 app.use(limiter);
 
 // Create a static pathmap for serving react pages
 app.use(express.static(path.resolve(__dirname, '../client/build')));
-app.use(cookieSession({
-  name: "github-auth-session",
-  keys: ['key1', 'key2']
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+
+app.use(
+  auth({
+    issuerBaseURL: ISSUER_BASE_URL,
+    baseURL: BASE_URL,
+    clientID: CLIENT_ID,
+    secret: SESSION_SECRET,
+    authRequired: true,
+    auth0Logout: true,
+  }),
+);
+//    authRequired: false,
 
 const port = process.env.PORT || 5000;
 
@@ -89,53 +63,33 @@ const port = process.env.PORT || 5000;
 // tslint:disable-next-line:no-console
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-// Function to check if the user has already authenticated. If not, redirects them to the auth page.
-const isLoggedIn = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (req.user) {
-    next();
-  } else {
-    // redirect the user to their original target
-    const daSesh = req.session as BetterSession
-    daSesh.redirectTo = req.originalUrl;
-    res.redirect('/auth/github');
+// Function to check if the user is in the list of approved users
+const isPermitted = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (req.oidc.user && AUTHORIZED_USERS.users.includes(req.oidc.user.email.toLowerCase())) {
+      next();
+  }else {
+    res.redirect(401, '/');
   }
 }
-
-app.get('/logout', (req, res) => {
-  req.session = null;
-  req.logOut();
-  res.redirect("/");
-})
 
 app.all('/auth/error', (req, res) => {
   res.redirect(401, '/');
 });
 
-// main authentication endpoint
-app.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-// github will callback to this location to process the login
-app.get('/auth/github/callback',
-  passport.authenticate('github',
-  { failureRedirect: '/auth/error'}),
-  (req, res) => {
-    // Successful authentication, redirect to original request URL
-    res.redirect((req.session as BetterSession).redirectTo || "/");
-  });
-
 // Looker auth endpoint that will sign the request from the Looker Embed SDK
-app.get('/auth', isLoggedIn,
+// app.get('/auth', requiresAuth(),
+app.get('/auth', isPermitted,
              (req: express.Request, res: express.Response) => {
 
   const signer = new LookerUrlSigner(LOOKER_SERVER, LOOKER_SECRET, EMBED_USER);
 
   const url = signer.signUrl(req.query.src);
-  res.json({url})
+  res.json({url});
 });
 
 // Redirect any unhandled routes to react
-app.get("*", isLoggedIn, (req, res) => {
+// app.get("*", requiresAuth(), (req, res) => {
+app.get("*", isPermitted, (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 

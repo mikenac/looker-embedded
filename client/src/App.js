@@ -18,8 +18,6 @@ const App = () => (
                 <Home />
               </Route>
               <Route path="/dashboard/:id" render={props => <LookerContent {...props} contentType="dashboard"/>}/>
-              <Route path="/look/:id" render={props => <LookerContent {...props} contentType="look"/>}/>
-              <Route path="/explore/:id"  render={props => <LookerContent {...props} contentType="explore"/>}/>
             </Switch>
           </Router>
         </React.Fragment>
